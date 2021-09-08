@@ -1,0 +1,41 @@
+/* css code */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-scroll-behavior: smooth;
+  scroll-behavior: smooth;
+  font-family: 'Roboto', sans-serif;
+}
+body,
+html {
+  height: 100%;
+}
+:root {
+  --cor-principal: #6b1c03;
+  --cor-icon: #f44242;
+  --icon-clicado: #692a00;
+}
+.header {
+  position: absolute;
+  display: flex;
+  padding: 0.5rem 0;
+  align-items: center;
+  justify-content: space-around;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  background-color: var(--cor-principal);
+  margin-bottom: 5rem;
+}
+
+.header img {
+  width: 4rem;
+}
+
+.component-Header h5{
+  margin-top: 5rem;
+  margin-left: 1rem;
+}
