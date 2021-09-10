@@ -96,7 +96,7 @@
   background-color: rgb(0 0 0 / 73%);
 }
 
-.modal .content-modal {
+.modal {
   display: flex;
   align-items: center;
   justify-content: center;
