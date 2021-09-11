@@ -1,10 +1,12 @@
 import React from 'react'
 import './Modal.css'
 
-function Modal(props) {
-  console.log(props.itemCart);
+function Modal({children, itemCart}) {
+  console.log(itemCart);
   return (
-    <h1>teste</h1>
+    <div className="modal">
+     {children}
+    </div>
     // <div className="modal ">
     //   <div className="content-prod">
     //     <div className="content-img">

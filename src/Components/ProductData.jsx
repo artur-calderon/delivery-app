@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { db } from '../firebase'
 import './ProductData.css'
-import Modal from './Modal'
+// import Modal from './Modal'
 
 export default function ProductData() {
   const [product, setProduct] = useState([])
   const [category, setCategory] = useState([])
   const [cart, setCart] = useState([])
-  const [isVisibleModal, setVisibleModal] = useState(false)
+  // const [isVisibleModal, setVisibleModal] = useState(false)
 
   useEffect(() => {
     db.collection('categoria').onSnapshot(item => {
@@ -47,7 +47,8 @@ export default function ProductData() {
   }
 
   function addToCart(item) {
-    setCart([...cart, item])
+    setCart([...cart, item]);
+   
     console.log(cart)
   }
 
@@ -70,17 +71,38 @@ export default function ProductData() {
       })}
     </>
   }
-  function algo(item) {
-    <Modal itemCart={item}/>
-    addToCart(item)
-    setVisibleModal(true);
-    console.log(isVisibleModal);
+  function abreModal(item) {
+
+      const modal = document.querySelector('.modal');
+      modal.style.display = 'flex'
+      const content = document.querySelector('.container-prod-modal')
+      content.innerHTML+=`
+      <div className="content-img">
+                <img src=${item.info.arquivoURL} alt="Foto do Produto" />
+          </div>
+          <div className="info-Content">
+                <h4 key=${item.id}>${item.info.name}</h4>
+                <p>${item.info.ingredientes}</p>
+                <b>R$ ${item.info.preco}</b>
+                <p>Observações: </p>
+                <textarea style="width:100%;height:70%"></textarea>
+                <button style="border:0">Adiconar ao Carrinho</button>
+          </div>
+      `
+
     
   }
+  
 
   return (
     <div>
-      {isVisibleModal ? <Modal/> : null}
+      <div className="modal">
+        <div className="container-prod-modal">
+        <div className="close">X</div>
+
+        </div>
+
+      </div>
       <div className="accordion">
         <div className="accordion__item">
           <div className="accordion__header">
@@ -112,13 +134,15 @@ export default function ProductData() {
                                   <h4 key={item.id}>{item.info.name}</h4>
                                   <p>{item.info.ingredientes}</p>
                                   <b>R${item.info.preco}</b>
-                                  <button onClick={() => algo(item)}>
+                                  <button onClick={() => abreModal(item)}>
                                     Add To Cart
                                   </button>
                                 </div>
                               </div>
                             )
                           }
+
+                          
                         })}
                       </div>
                     </div>
