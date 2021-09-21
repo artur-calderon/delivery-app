@@ -1,8 +1,8 @@
-.show{
+.show {
   margin-top: 2rem;
   text-align: center;
 }
-.show h3{
+.show h3 {
   margin-bottom: 1rem;
 }
 /* .cards {
@@ -17,21 +17,18 @@
 .card {
   width: 100%;
   display: grid;
-  /* grid-auto-rows: 1fr; */
-  
   border-radius: 0.3rem;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.459);
   padding: 0.5rem 0.2rem;
   text-align: center;
 }
 .img-Card {
   width: 100%;
-  
 }
-.img-Card img{
+.img-Card img {
   object-fit: contain;
   width: 6rem;
+  border-radius: 1rem;
 }
-.card p{
+.card p {
   font-size: 0.8rem;
 }
