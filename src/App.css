@@ -1,1 +1,32 @@
+.cart-icon {
+  width: 4rem;
+  height: 4rem;
+  background-color: silver;
+  border-radius: 2rem;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-right: 0.2rem;
+  margin-bottom: 0.2rem;
+}
+.cart-icon img {
+  width: 2rem;
+}
 
+.cart-icon .notify {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 1rem;
+  background-color: red;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: -20px;
+  left: 0;
+  color: blue;
+}

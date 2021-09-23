@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import './ProductData.css'
 import { db } from '../firebase'
-// import Modal from './Modal'
+import Cart from './Cart'
 
 export default function ProductData() {
   const [category, setCategory] = useState([])
-  const product = useSelector(state => state)
+  const product = useSelector(state => state.prod)
 
   //Sempre que for usar evento de click, usar uma chamada para função no elemento react
   function toggleContent(e) {
@@ -28,10 +28,8 @@ export default function ProductData() {
     })
   }, [])
 
-  console.log(category)
-
   function getData(item) {
-    alert(item.ingredientes)
+    ;<Cart itemCart={item} />
   }
 
   return (
@@ -53,10 +51,10 @@ export default function ProductData() {
                         {val.cat}
                       </h1>
                       <div id={val.cat} className="accordion__content">
-                        {product.map((item, idx) => {
+                        {product.map(item => {
                           if (val.cat === item.categoria) {
                             return (
-                              <div className="content-prod" key={idx}>
+                              <div className="content-prod" key={item.id}>
                                 <div className="content-img">
                                   <img
                                     src={item.arquivoURL}
@@ -67,7 +65,9 @@ export default function ProductData() {
                                   <h4 key={item.id}>{item.name}</h4>
                                   <p>{item.ingredientes}</p>
                                   <b>R${item.preco}</b>
-                                  <button onClick={() => getData(item)}>
+                                  <button
+                                    onClick={() => <Cart itemCart={item} />}
+                                  >
                                     Add To Cart
                                   </button>
                                 </div>
