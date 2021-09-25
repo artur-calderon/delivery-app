@@ -5,8 +5,16 @@ import ProductData from './Components/ProductData'
 import Cart from './Components/Cart'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { FaShoppingCart } from 'react-icons/fa'
 
 function App() {
+  const cartLength = useSelector(state => state.cart.length)
+
+  if (cartLength > 0) {
+    document.querySelector('.notify').style.display = 'flex'
+  }
+
   function Home() {
     return (
       <>
@@ -22,12 +30,10 @@ function App() {
         <Link to="/Cart">
           <div className="cart-icon">
             <div className="notify">
-              <p>1</p>
+              <p>{cartLength}</p>
             </div>
-            <img
-              src="https://img-premium.flaticon.com/png/512/2838/premium/2838895.png?token=exp=1632349224~hmac=1cac160e90279dc52d542c093c67fd93"
-              alt="icon"
-            />
+
+            <FaShoppingCart fontSize="1.8rem" />
           </div>
         </Link>
         <Switch>

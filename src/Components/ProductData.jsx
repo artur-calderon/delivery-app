@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import './ProductData.css'
 import { db } from '../firebase'
-import Cart from './Cart'
+import { addItem } from '../store/Reducers/Cart'
+import { FaCartPlus } from 'react-icons/fa'
 
 export default function ProductData() {
   const [category, setCategory] = useState([])
   const product = useSelector(state => state.prod)
-
+  const dispatch = useDispatch()
   //Sempre que for usar evento de click, usar uma chamada para função no elemento react
   function toggleContent(e) {
     let elementChild = document.querySelector('#' + e.target.innerHTML)
@@ -28,8 +29,9 @@ export default function ProductData() {
     })
   }, [])
 
-  function getData(item) {
-    ;<Cart itemCart={item} />
+  function getData(car, e) {
+    e.preventDefault()
+    dispatch(addItem(car))
   }
 
   return (
@@ -54,7 +56,7 @@ export default function ProductData() {
                         {product.map(item => {
                           if (val.cat === item.categoria) {
                             return (
-                              <div className="content-prod" key={item.id}>
+                              <div className="content-prod">
                                 <div className="content-img">
                                   <img
                                     src={item.arquivoURL}
@@ -65,11 +67,10 @@ export default function ProductData() {
                                   <h4 key={item.id}>{item.name}</h4>
                                   <p>{item.ingredientes}</p>
                                   <b>R${item.preco}</b>
-                                  <button
-                                    onClick={() => <Cart itemCart={item} />}
-                                  >
-                                    Add To Cart
-                                  </button>
+                                  <FaCartPlus
+                                    onClick={e => getData(item, e)}
+                                    fontSize="2rem"
+                                  />
                                 </div>
                               </div>
                             )
