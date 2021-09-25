@@ -6,7 +6,7 @@ db.collection('produtos')
   .orderBy('categoria')
   .onSnapshot(data => {
     data.docs.map(item => {
-      return INITIAL_STATE.push(item.data())
+      return INITIAL_STATE.push(item)
     })
   })
 

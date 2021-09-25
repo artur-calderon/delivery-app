@@ -41,7 +41,7 @@ export default function ProductData() {
           <div className="accordion__header">
             <div className="accordion__title">
               {category.map(val => {
-                const cat = product.find(p => p.categoria === val.cat)
+                const cat = product.find(p => p.data().categoria === val.cat)
                 if (cat) {
                   return (
                     <div>
@@ -54,19 +54,19 @@ export default function ProductData() {
                       </h1>
                       <div id={val.cat} className="accordion__content">
                         {product.map(item => {
-                          if (val.cat === item.categoria) {
+                          if (val.cat === item.data().categoria) {
                             return (
-                              <div className="content-prod">
+                              <div className="content-prod" key={item.id}>
                                 <div className="content-img">
                                   <img
-                                    src={item.arquivoURL}
+                                    src={item.data().arquivoURL}
                                     alt="Foto do Produto"
                                   />
                                 </div>
                                 <div className="info-Content">
-                                  <h4 key={item.id}>{item.name}</h4>
-                                  <p>{item.ingredientes}</p>
-                                  <b>R${item.preco}</b>
+                                  <h4 key={item.id}>{item.data().name}</h4>
+                                  <p>{item.data().ingredientes}</p>
+                                  <b>R${item.data().preco}</b>
                                   <FaCartPlus
                                     onClick={e => getData(item, e)}
                                     fontSize="2rem"

@@ -7,13 +7,18 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { FaShoppingCart } from 'react-icons/fa'
+import { useEffect } from 'react'
 
 function App() {
   const cartLength = useSelector(state => state.cart.length)
 
-  if (cartLength > 0) {
-    document.querySelector('.notify').style.display = 'flex'
-  }
+  useEffect(() => {
+    if (cartLength === 0) {
+      document.querySelector('.notify').style.display = 'none'
+    } else if (cartLength > 0) {
+      document.querySelector('.notify').style.display = 'flex'
+    }
+  }, [cartLength])
 
   function Home() {
     return (

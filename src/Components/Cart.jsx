@@ -16,8 +16,26 @@ export default function Cart() {
   const dispatch = useDispatch()
 
   function remover(id) {
-    console.log(id)
     dispatch(removeItem(id))
+  }
+
+  function obs(item) {
+    let prod = []
+    item.map(i => {
+      prod.push(i)
+    })
+    return (
+      <>
+        <p>Faça uma observação:</p>
+        <textarea></textarea>
+        <button onClick={() => fazPedido(prod)}>Fazer Pedido</button>
+      </>
+    )
+  }
+  function fazPedido(prod) {
+    prod.map(val => {
+      alert(val.id)
+    })
   }
   return (
     <CartSection>
@@ -26,12 +44,12 @@ export default function Cart() {
           return (
             <div className="content-prod" key={id}>
               <div className="content-img">
-                <img src={item.arquivoURL} alt="Foto do Produto" />
+                <img src={item.data().arquivoURL} alt="Foto do Produto" />
               </div>
               <div className="info-Content">
-                <h4 key={item.id}>{item.name}</h4>
-                <p>{item.ingredientes}</p>
-                <b>R${item.preco}</b>
+                <h4 key={item.id}>{item.data().name}</h4>
+                <p>{item.data().ingredientes}</p>
+                <b>R${item.data().preco}</b>
                 <button onClick={() => remover(item.id)}>Remover</button>
               </div>
             </div>
@@ -44,6 +62,7 @@ export default function Cart() {
       <Link to="/">
         <h1>Voltar</h1>
       </Link>
+      {item.length > 0 ? obs(item) : null}
     </CartSection>
   )
 }
