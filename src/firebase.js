@@ -7,11 +7,12 @@ const firebaseConfig = firebase.initializeApp({
   storageBucket: 'deliveryapp-amostra.appspot.com',
   messagingSenderId: '147922257926',
   appId: '1:147922257926:web:2cb55726652e7ac8139b87'
-});
+})
 
-  const db = firebase.firestore()
-  const auth = firebase.auth()
-  const storage = firebase.storage()
-  const functions = firebase.functions()
+const db = firebase.firestore()
+const auth = firebase.auth()
+const storage = firebase.storage()
+const functions = firebase.functions()
+const provider = new firebase.auth.GoogleAuthProvider()
 
-export  {db , auth, storage, functions, firebaseConfig}
+export { db, auth, storage, functions, firebaseConfig, provider }

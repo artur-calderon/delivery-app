@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
 import './Header.css'
-export default function Header() {
-
-  const [user, setUser] = useState('Artur Calderon')
+export default function Header(props) {
+  // const [user, setUser] = useState('Artur Calderon')
 
   return (
     <div className="component-Header">
-
       <div className="header">
         <div className="logo">
           <img
@@ -16,7 +14,11 @@ export default function Header() {
         </div>
       </div>
 
-      <h5>Bem-Vindo, {user}</h5>
+      <h5>Bem-Vindo, {props.User.nome} </h5>
+      <img
+        style={{ width: '2rem', heigth: '2rem', borderRadius: '1rem' }}
+        src={props.User.photo}
+      />
     </div>
   )
 }
