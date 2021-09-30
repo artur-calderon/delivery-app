@@ -1,83 +1,92 @@
-import Header from './Components/Header'
 import './App.css'
-import PromotionCard from './Components/PromotionCard'
-import ProductData from './Components/ProductData'
 import Cart from './Components/Cart'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { FaShoppingCart } from 'react-icons/fa'
-import { useEffect, useState } from 'react'
-import { auth, provider } from './firebase.js'
+import React, { useState } from 'react'
+// import { auth } from './firebase.js'
+import Home from './Components/Home'
+import Login from './Components/Login'
+import { auth, provider } from './firebase'
+import { addUserInfo } from './store/Reducers/User'
+import { useDispatch } from 'react-redux'
 
 function App() {
-  const cartLength = useSelector(state => state.cart.length)
-  const [user, setUser] = useState('')
+  const [isLogado, setIsLogado] = useState(false)
+  const [user, setUser] = useState({ nome: null, tel: null, foto: null })
+  const dispatch = useDispatch()
+  console.log('User do app')
+  console.log(user)
+  console.log(isLogado)
 
-  useEffect(() => {
-    if (cartLength === 0) {
-      document.querySelector('.notify').style.display = 'none'
-    } else if (cartLength > 0) {
-      document.querySelector('.notify').style.display = 'flex'
-    }
-  }, [cartLength])
+  const logaGoogle = async () => {
+    await auth
+      .signInWithPopup(provider)
+      .then(result => {
+        // The signed-in user info.
+        let user = result.user
 
-  function Home() {
-    const logaGoogle = () => {
-      auth
-        .signInWithPopup(provider)
-        .then(result => {
-          // This gives you a Google Access Token. You can use it to access the Google API.
-          // The signed-in user info.
-          const user = result.user
-          console.log(user.displayName)
+        if (user) {
+          setIsLogado(true)
           setUser({
             nome: user.displayName,
-            phone: user.phoneNumber,
-            photo: user.photoURL
+            tel: user.phoneNumber,
+            foto: user.photoURL
           })
+          dispatch(addUserInfo(user))
+        }
+        // return {
+        //   nome: user.displayName,
+        //   tel: user.phoneNumber,
+        //   foto: user.photoURL
+        // }
 
-          // ...
-        })
-        .catch(error => {
-          // Handle Errors here.
-          const errorCode = error.code
-          console.log(errorCode)
-          const errorMessage = error.message
-          console.log(errorMessage)
-          // The email of the user's account used.
-          const email = error.email
-          console.log(email)
-          // The AuthCredential type that was used.
-          // ...
-        })
-    }
-    console.log(user)
-    return (
-      <>
-        <PromotionCard />
-        <ProductData />
-
-        <button onClick={logaGoogle}>Logar Google</button>
-      </>
-    )
+        // ...
+      })
+      .catch(error => {
+        // Handle Errors here.
+        const errorCode = error.code
+        console.log(errorCode)
+        const errorMessage = error.message
+        alert(errorMessage)
+        // The email of the user's account used.
+        const email = error.email
+        console.log(email)
+        // The AuthCredential type that was used.
+        // ...
+      })
   }
+
+  // dispatch(addUserInfo('Artur Alexandre'))
+  // function Home() {
+  //   useEffect(() => {
+  //     if (cartLength === 0) {
+  //       document.querySelector('.notify').style.display = 'none'
+  //     } else if (cartLength > 0) {
+  //       document.querySelector('.notify').style.display = 'flex'
+  //     }
+  //   }, [cartLength])
+  //   return (
+  //     <>
+  //       <Header User={user} />
+  //       <Link to="/Cart">
+  //         <div className="cart-icon">
+  //           <div className="notify">
+  //             <p>{cartLength}</p>
+  //           </div>
+  //           <FaShoppingCart fontSize="1.8rem" />
+  //         </div>
+  //       </Link>
+  //       <PromotionCard />
+  //       <ProductData />
+  //       <button onClick={() => logOut()}>Sair</button>
+  //     </>
+  //   )
+  // }
   return (
     <Router>
       <div className="App">
-        <Header User={user} />
-        <Link to="/Cart">
-          <div className="cart-icon">
-            <div className="notify">
-              <p>{cartLength}</p>
-            </div>
-
-            <FaShoppingCart fontSize="1.8rem" />
-          </div>
-        </Link>
         <Switch>
           <Route path="/Cart" exact component={Cart} />
-          <Route path="/" component={Home} />
+          {isLogado ? <Home User={user} /> : <Login logaGoogle={logaGoogle} />}
         </Switch>
       </div>
     </Router>

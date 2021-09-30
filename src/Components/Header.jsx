@@ -1,8 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react'
 import './Header.css'
-export default function Header(props) {
-  // const [user, setUser] = useState('Artur Calderon')
+import { useSelector } from 'react-redux'
+import { HeaderUserInfo } from '../styles/styles'
 
+export default function Header({ User }) {
+  const user = useSelector(state => state.user)
+  console.log('user o header  ')
+  console.log(user)
   return (
     <div className="component-Header">
       <div className="header">
@@ -13,12 +17,20 @@ export default function Header(props) {
           />
         </div>
       </div>
-
-      <h5>Bem-Vindo, {props.User.nome} </h5>
-      <img
-        style={{ width: '2rem', heigth: '2rem', borderRadius: '1rem' }}
-        src={props.User.photo}
-      />
+      {user.map(user => {
+        return (
+          <HeaderUserInfo>
+            <h5>
+              Bem-Vindo, <br /> {user.displayName}{' '}
+            </h5>
+            <img
+              style={{ width: '2rem', heigth: '2rem', borderRadius: '1rem' }}
+              src={user.photoURL}
+              alt={user.displayName}
+            />
+          </HeaderUserInfo>
+        )
+      })}
     </div>
   )
 }

@@ -22,7 +22,7 @@ export default function ProductData() {
   useEffect(() => {
     db.collection('categoria').onSnapshot(cat => {
       setCategory(
-        cat.docs.map(val => {
+        cat.docs.map(function (val) {
           return { id: val.id, cat: val.data().categoryName }
         })
       )
