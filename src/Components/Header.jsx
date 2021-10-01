@@ -1,12 +1,23 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './Header.css'
 import { useSelector } from 'react-redux'
 import { HeaderUserInfo } from '../styles/styles'
+import { auth } from '../firebase'
 
-export default function Header({ User }) {
-  const user = useSelector(state => state.user)
+export default function Header() {
+  // const user = useSelector(state => state.user)
+  const [userAuth, setUserAuth] = useState({
+    displayName: null,
+    photoURL: null
+  })
   console.log('user o header  ')
-  console.log(user)
+  console.log(userAuth)
+
+  useEffect(() => {
+    auth.onAuthStateChanged(user => {
+      setUserAuth(user)
+    })
+  })
   return (
     <div className="component-Header">
       <div className="header">
@@ -17,20 +28,21 @@ export default function Header({ User }) {
           />
         </div>
       </div>
-      {user.map(user => {
-        return (
-          <HeaderUserInfo>
+
+      <HeaderUserInfo>
+        {userAuth ? (
+          <>
             <h5>
-              Bem-Vindo, <br /> {user.displayName}{' '}
+              Bem-Vindo, <br /> {userAuth.displayName}
             </h5>
             <img
               style={{ width: '2rem', heigth: '2rem', borderRadius: '1rem' }}
-              src={user.photoURL}
-              alt={user.displayName}
+              src={userAuth.photoURL}
+              alt={userAuth.displayName}
             />
-          </HeaderUserInfo>
-        )
-      })}
+          </>
+        ) : null}
+      </HeaderUserInfo>
     </div>
   )
 }

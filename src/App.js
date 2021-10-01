@@ -6,16 +6,15 @@ import React, { useState } from 'react'
 import Home from './Components/Home'
 import Login from './Components/Login'
 import { auth, provider } from './firebase'
-import { addUserInfo } from './store/Reducers/User'
-import { useDispatch } from 'react-redux'
+// import { addUserInfo } from './store/Reducers/User'
+// import { useDispatch } from 'react-redux'
 
 function App() {
   const [isLogado, setIsLogado] = useState(false)
-  const [user, setUser] = useState({ nome: null, tel: null, foto: null })
-  const dispatch = useDispatch()
+  const [userAuth, setUserAuth] = useState({})
+  // const dispatch = useDispatch()
   console.log('User do app')
-  console.log(user)
-  console.log(isLogado)
+  console.log(userAuth)
 
   const logaGoogle = async () => {
     await auth
@@ -26,20 +25,9 @@ function App() {
 
         if (user) {
           setIsLogado(true)
-          setUser({
-            nome: user.displayName,
-            tel: user.phoneNumber,
-            foto: user.photoURL
-          })
-          dispatch(addUserInfo(user))
+          setUserAuth(user)
+          // dispatch(addUserInfo(user))
         }
-        // return {
-        //   nome: user.displayName,
-        //   tel: user.phoneNumber,
-        //   foto: user.photoURL
-        // }
-
-        // ...
       })
       .catch(error => {
         // Handle Errors here.
@@ -55,38 +43,29 @@ function App() {
       })
   }
 
-  // dispatch(addUserInfo('Artur Alexandre'))
-  // function Home() {
-  //   useEffect(() => {
-  //     if (cartLength === 0) {
-  //       document.querySelector('.notify').style.display = 'none'
-  //     } else if (cartLength > 0) {
-  //       document.querySelector('.notify').style.display = 'flex'
-  //     }
-  //   }, [cartLength])
-  //   return (
-  //     <>
-  //       <Header User={user} />
-  //       <Link to="/Cart">
-  //         <div className="cart-icon">
-  //           <div className="notify">
-  //             <p>{cartLength}</p>
-  //           </div>
-  //           <FaShoppingCart fontSize="1.8rem" />
-  //         </div>
-  //       </Link>
-  //       <PromotionCard />
-  //       <ProductData />
-  //       <button onClick={() => logOut()}>Sair</button>
-  //     </>
-  //   )
-  // }
+  function logOut() {
+    // dispatch(removeUserInfo(user))
+    auth
+      .signOut()
+      .then(() => {
+        alert('Deslogado')
+        setUserAuth(null)
+      })
+      .catch(er => {
+        alert(er)
+      })
+  }
+
   return (
     <Router>
       <div className="App">
         <Switch>
           <Route path="/Cart" exact component={Cart} />
-          {isLogado ? <Home User={user} /> : <Login logaGoogle={logaGoogle} />}
+          {userAuth === null ? (
+            <Login logaGoogle={logaGoogle} />
+          ) : (
+            <Home desloga={logOut} />
+          )}
         </Switch>
       </div>
     </Router>

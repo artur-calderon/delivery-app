@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Header from './Header'
 import PromotionCard from './PromotionCard'
@@ -6,28 +6,26 @@ import ProductData from './ProductData'
 import { FaShoppingCart } from 'react-icons/fa'
 import { useSelector, useDispatch } from 'react-redux'
 import { auth } from '../firebase'
-import { removeUserInfo } from '../store/Reducers/User'
+// import { removeUserInfo } from '../store/Reducers/User'
 
-export default function Home({ User }) {
+export default function Home({ desloga }) {
   const cartLength = useSelector(state => state.cart.length)
+  const [userAuth, setUserAuth] = useState({
+    displayName: null,
+    photoURL: null
+  })
   const user = useSelector(state => state.user)
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
 
   console.log('user do da store')
   console.log(user)
 
   useEffect(() => {
     auth.onAuthStateChanged(user => {
-      if (user) {
-        // setPUser({
-        //   nome: user.displayName,
-        //   tel: user.phoneNumber,
-        //   foto: user.photoURL
-        // })
-        // setIsLogado(true)
-      }
+      setUserAuth(user)
     })
-  }, [user])
+  }, [])
+
   useEffect(() => {
     if (cartLength === 0) {
       document.querySelector('.notify').style.display = 'none'
@@ -36,22 +34,10 @@ export default function Home({ User }) {
     }
   }, [cartLength])
 
-  function logOut() {
-    dispatch(removeUserInfo(user))
-    auth
-      .signOut()
-      .then(() => {
-        alert('Deslogado')
-
-        window.location.href = '/'
-      })
-      .catch(er => {
-        alert(er)
-      })
-  }
+  console.log(userAuth)
   return (
     <>
-      <Header User={User} />
+      <Header />
 
       <Link to="/Cart">
         <div className="cart-icon">
@@ -63,7 +49,7 @@ export default function Home({ User }) {
       </Link>
       <PromotionCard />
       <ProductData />
-      <button onClick={() => logOut()}>Sair</button>
+      <button onClick={() => desloga()}>Sair</button>
     </>
   )
 }
