@@ -6,25 +6,20 @@ import ProductData from './ProductData'
 import { FaShoppingCart } from 'react-icons/fa'
 import { useSelector, useDispatch } from 'react-redux'
 import { auth } from '../firebase'
+import { GoogleLogout } from 'react-google-login'
 // import { removeUserInfo } from '../store/Reducers/User'
 
 export default function Home({ desloga }) {
   const cartLength = useSelector(state => state.cart.length)
-  const [userAuth, setUserAuth] = useState({
-    displayName: null,
-    photoURL: null
-  })
+  // const [userAuth, setUserAuth] = useState({
+  //   displayName: null,
+  //   photoURL: null
+  // })
   const user = useSelector(state => state.user)
   // const dispatch = useDispatch()
 
   console.log('user do da store')
   console.log(user)
-
-  useEffect(() => {
-    auth.onAuthStateChanged(user => {
-      setUserAuth(user)
-    })
-  }, [])
 
   useEffect(() => {
     if (cartLength === 0) {
@@ -34,7 +29,6 @@ export default function Home({ desloga }) {
     }
   }, [cartLength])
 
-  console.log(userAuth)
   return (
     <>
       <Header />
@@ -49,7 +43,12 @@ export default function Home({ desloga }) {
       </Link>
       <PromotionCard />
       <ProductData />
-      <button onClick={() => desloga()}>Sair</button>
+      <GoogleLogout
+        clientId="558850311827-r92555jdbc3jvhq0f0oult7hnaide6e0.apps.googleusercontent.com"
+        buttonText="Logout"
+        onLogoutSuccess={desloga}
+      ></GoogleLogout>
+      {/* <button onClick={() => desloga()}>Sair</button> */}
     </>
   )
 }

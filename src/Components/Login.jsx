@@ -1,6 +1,7 @@
 import React from 'react'
 import { ContainerLogin, LogoLogin } from '../styles/styles'
 import '../Components/Login.css'
+import { GoogleLogin } from 'react-google-login'
 
 export default function Login({ logaGoogle }) {
   return (
@@ -9,7 +10,7 @@ export default function Login({ logaGoogle }) {
         src="https://i.pinimg.com/originals/b1/fc/bb/b1fcbbfd4fb8116c714ef352bb39bbaf.jpg"
         alt="Logo"
       />
-      <div className="google-btn" onClick={() => logaGoogle()}>
+      {/* <div className="google-btn" onClick={() => logaGoogle()}>
         <div className="google-icon-wrapper">
           <img
             className="google-icon"
@@ -19,7 +20,16 @@ export default function Login({ logaGoogle }) {
         <p className="btn-text">
           <b>Logar Com Google</b>
         </p>
-      </div>
+      </div> */}
+      <GoogleLogin
+        clientId={
+          '558850311827-r92555jdbc3jvhq0f0oult7hnaide6e0.apps.googleusercontent.com'
+        }
+        buttonText="Log in with Google"
+        onSuccess={logaGoogle}
+        onFailure={logaGoogle}
+        isSignedIn={false}
+      />
       <a href="" className="fb connect btn-text">
         Logar com Facebook
       </a>

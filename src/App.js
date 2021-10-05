@@ -5,55 +5,25 @@ import React, { useState } from 'react'
 // import { auth } from './firebase.js'
 import Home from './Components/Home'
 import Login from './Components/Login'
-import { auth, provider } from './firebase'
-// import { addUserInfo } from './store/Reducers/User'
-// import { useDispatch } from 'react-redux'
+// import { auth, provider } from './firebase'
+import { GoogleLogout } from 'react-google-login'
+import { addUserInfo, removeUserInfo } from './store/Reducers/User'
+import { useDispatch, useSelector } from 'react-redux'
 
 function App() {
-  const [isLogado, setIsLogado] = useState(false)
-  const [userAuth, setUserAuth] = useState({})
-  // const dispatch = useDispatch()
+  // const [userAuth, setUserAuth] = useState(null)
+  const user = useSelector(state => state.user)
+  const dispatch = useDispatch()
   console.log('User do app')
-  console.log(userAuth)
+  console.log(user)
 
-  const logaGoogle = async () => {
-    await auth
-      .signInWithPopup(provider)
-      .then(result => {
-        // The signed-in user info.
-        let user = result.user
-
-        if (user) {
-          setIsLogado(true)
-          setUserAuth(user)
-          // dispatch(addUserInfo(user))
-        }
-      })
-      .catch(error => {
-        // Handle Errors here.
-        const errorCode = error.code
-        console.log(errorCode)
-        const errorMessage = error.message
-        alert(errorMessage)
-        // The email of the user's account used.
-        const email = error.email
-        console.log(email)
-        // The AuthCredential type that was used.
-        // ...
-      })
+  const LogOut = () => {
+    dispatch(removeUserInfo(user))
   }
+  const handleLogin = data => {
+    console.log(data.profileObj)
 
-  function logOut() {
-    // dispatch(removeUserInfo(user))
-    auth
-      .signOut()
-      .then(() => {
-        alert('Deslogado')
-        setUserAuth(null)
-      })
-      .catch(er => {
-        alert(er)
-      })
+    dispatch(addUserInfo(data.profileObj))
   }
 
   return (
@@ -61,10 +31,12 @@ function App() {
       <div className="App">
         <Switch>
           <Route path="/Cart" exact component={Cart} />
-          {userAuth === null ? (
-            <Login logaGoogle={logaGoogle} />
+          {user.length === 0 ? (
+            <>
+              <Login logaGoogle={handleLogin} />
+            </>
           ) : (
-            <Home desloga={logOut} />
+            <Home desloga={LogOut} />
           )}
         </Switch>
       </div>

@@ -5,18 +5,14 @@ import { HeaderUserInfo } from '../styles/styles'
 import { auth } from '../firebase'
 
 export default function Header() {
-  // const user = useSelector(state => state.user)
-  const [userAuth, setUserAuth] = useState({
-    displayName: null,
-    photoURL: null
-  })
-  console.log('user o header  ')
-  console.log(userAuth)
+  const user = useSelector(state => state.user)
+  // const [userAuth, setUserAuth] = useState({
+  //   displayName: null,
+  //   photoURL: null
+  // })
 
   useEffect(() => {
-    auth.onAuthStateChanged(user => {
-      setUserAuth(user)
-    })
+    auth.onAuthStateChanged(user => {})
   })
   return (
     <div className="component-Header">
@@ -30,18 +26,28 @@ export default function Header() {
       </div>
 
       <HeaderUserInfo>
-        {userAuth ? (
-          <>
-            <h5>
-              Bem-Vindo, <br /> {userAuth.displayName}
-            </h5>
-            <img
-              style={{ width: '2rem', heigth: '2rem', borderRadius: '1rem' }}
-              src={userAuth.photoURL}
-              alt={userAuth.displayName}
-            />
-          </>
-        ) : null}
+        {user.map((user, key) => {
+          if (user) {
+            return (
+              <div key={key}>
+                <h5>
+                  Bem-Vindo, <br /> {user.name}
+                </h5>
+                <img
+                  style={{
+                    width: '2rem',
+                    heigth: '2rem',
+                    borderRadius: '1rem'
+                  }}
+                  src={user.imageUrl}
+                  alt={user.name}
+                />
+              </div>
+            )
+          } else {
+            return null
+          }
+        })}
       </HeaderUserInfo>
     </div>
   )
