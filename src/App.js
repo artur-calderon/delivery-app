@@ -17,7 +17,7 @@ function App() {
   console.log('User do app')
   console.log(user)
 
-  const LogOut = () => {
+  const LogOut = res => {
     dispatch(removeUserInfo(user))
   }
   const handleLogin = data => {
