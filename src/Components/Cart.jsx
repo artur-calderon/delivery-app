@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { removeItem } from '../store/Reducers/Cart'
 import Header from './Header'
+import firebase from 'firebase'
 
 const CartSection = styled.div`
   display: flex;
@@ -12,12 +13,16 @@ const CartSection = styled.div`
   flex-direction: column;
   margin: 2rem 1rem 0 1rem;
 `
-export default function Cart({ User }) {
+export default function Cart() {
   const item = useSelector(state => state.cart)
   const dispatch = useDispatch()
+  const [userAuth, setUserAuth] = useState(null)
 
-  console.log('User do cart')
-  console.log(User)
+  useEffect(() => {
+    const authObserver = firebase.auth().onAuthStateChanged(user => {
+      setUserAuth(user)
+    })
+  })
 
   function remover(id) {
     dispatch(removeItem(id))
@@ -43,7 +48,7 @@ export default function Cart({ User }) {
   }
   return (
     <>
-      <Header />
+      <Header User={userAuth} />
       <CartSection>
         {item.length > 0 ? (
           item.map((item, id) => {

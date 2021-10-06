@@ -21,15 +21,7 @@ export default function Login({ logaGoogle }) {
           <b>Logar Com Google</b>
         </p>
       </div> */}
-      <GoogleLogin
-        clientId={
-          '558850311827-r92555jdbc3jvhq0f0oult7hnaide6e0.apps.googleusercontent.com'
-        }
-        buttonText="Log in with Google"
-        onSuccess={logaGoogle}
-        onFailure={logaGoogle}
-        isSignedIn={false}
-      />
+
       <a href="" className="fb connect btn-text">
         Logar com Facebook
       </a>
