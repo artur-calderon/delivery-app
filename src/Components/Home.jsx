@@ -21,8 +21,7 @@ export default function Home({ desloga }) {
   }, [cartLength])
 
   useEffect(() => {
-    const authObserver = firebase.auth().onAuthStateChanged(user => {
-      console.log(user)
+    firebase.auth().onAuthStateChanged(user => {
       setUserAuth(user)
     })
   })

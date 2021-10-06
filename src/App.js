@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react'
 import Home from './Components/Home'
 import firebase from 'firebase'
 import StyleFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
+import styled from 'styled-components'
 
 let uiConfig = {
   signInFlow: 'redirect',
@@ -20,11 +21,27 @@ let uiConfig = {
   }
 }
 
+const Login = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+`
+const ImgLogo = styled.img`
+  width: 100%;
+  height: auto;
+`
+
 function App() {
   const [userAuth, setUserAuth] = useState(null)
 
   useEffect(() => {
-    const authObserver = firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged(user => {
       setUserAuth(user)
     })
   })
@@ -46,12 +63,16 @@ function App() {
         <Switch>
           <Route path="/Cart" exact component={Cart} />
           {userAuth === null ? (
-            <>
+            <Login>
+              <ImgLogo
+                src="https://play-lh.googleusercontent.com/7Jm2vqYC7Pzm8M3AqwjJCFXtBL09gPVQ7HN9QSEBr3udZ0o_okVo-Fzrj309qESQWE0"
+                alt="logo"
+              />
               <StyleFirebaseAuth
                 uiConfig={uiConfig}
                 firebaseAuth={firebase.auth()}
               />
-            </>
+            </Login>
           ) : (
             <Home desloga={logOut} />
           )}

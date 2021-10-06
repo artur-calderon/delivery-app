@@ -19,7 +19,7 @@ export default function Cart() {
   const [userAuth, setUserAuth] = useState(null)
 
   useEffect(() => {
-    const authObserver = firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged(user => {
       setUserAuth(user)
     })
   })
@@ -29,21 +29,28 @@ export default function Cart() {
   }
 
   function obs(item) {
-    let prod = []
-    item.map(i => {
-      prod.push(i)
-    })
+    let preco = null
+    {
+      item.map(it => {
+        let preco2 = it.data().preco
+
+        return (preco += preco2)
+      })
+    }
     return (
       <>
+        <p>Total:{preco}</p>
         <p>Faça uma observação:</p>
         <textarea></textarea>
-        <button onClick={() => fazPedido(prod)}>Fazer Pedido</button>
+
+        <button onClick={() => fazPedido(item, preco)}>Fazer Pedido</button>
       </>
     )
   }
-  function fazPedido(prod) {
+  function fazPedido(prod, preco) {
     prod.map(val => {
-      alert(val.id)
+      console.log(val)
+      alert(`Produto: ${val.data().name} Valor: ${preco}`)
     })
   }
   return (
@@ -69,7 +76,6 @@ export default function Cart() {
         ) : (
           <h3>Sem produtos no carrinho</h3>
         )}
-
         <Link to="/">
           <h1>Voltar</h1>
         </Link>

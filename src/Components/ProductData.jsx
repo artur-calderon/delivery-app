@@ -44,10 +44,9 @@ export default function ProductData() {
                 const cat = product.find(p => p.data().categoria === val.cat)
                 if (cat) {
                   return (
-                    <div>
+                    <div key={val.id}>
                       <h1
                         onClick={e => toggleContent(e)}
-                        key={val.id}
                         className="title-prod"
                       >
                         {val.cat}

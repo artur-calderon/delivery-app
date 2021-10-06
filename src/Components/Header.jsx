@@ -1,16 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import './Header.css'
-import { useSelector } from 'react-redux'
+
 import { HeaderUserInfo } from '../styles/styles'
-import firebase from 'firebase'
 
 export default function Header({ User }) {
-  const user = useSelector(state => state.user)
-  // const [userAuth, setUserAuth] = useState({
-  //   displayName: null,
-  //   photoURL: null
-  // })
-
   return (
     <div className="component-Header">
       <div className="header">
