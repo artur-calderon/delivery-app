@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { removeItem } from '../store/Reducers/Cart'
 import Header from './Header'
 import firebase from 'firebase'
+import { db } from '../firebase'
 
 const CartSection = styled.div`
   display: flex;
@@ -29,28 +30,33 @@ export default function Cart() {
   }
 
   function obs(item) {
-    let preco = null
+    let total = null
     {
       item.map(it => {
         let preco2 = it.data().preco
 
-        return (preco += preco2)
+        return (total += preco2)
       })
     }
     return (
       <>
-        <p>Total:{preco}</p>
+        <p>Total:{total}</p>
         <p>Faça uma observação:</p>
         <textarea></textarea>
 
-        <button onClick={() => fazPedido(item, preco)}>Fazer Pedido</button>
+        <button onClick={() => fazPedido(item, total)}>Fazer Pedido</button>
       </>
     )
   }
-  function fazPedido(prod, preco) {
+  function fazPedido(prod, total) {
     prod.map(val => {
-      console.log(val)
-      alert(`Produto: ${val.data().name} Valor: ${preco}`)
+      let pedido = {
+        nomeCliente: userAuth.displayName,
+        pedidoNome: val.data().name,
+        valor: total
+      }
+      console.log(pedido)
+      // db.collection('pedido').add()
     })
   }
   return (

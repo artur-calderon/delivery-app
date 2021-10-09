@@ -45,6 +45,7 @@ function App() {
       setUserAuth(user)
     })
   })
+
   const logOut = () => {
     firebase
       .auth()

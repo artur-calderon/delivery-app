@@ -6,6 +6,7 @@ import ProductData from './ProductData'
 import { FaShoppingCart } from 'react-icons/fa'
 import { useSelector } from 'react-redux'
 import firebase from 'firebase'
+import { db } from '../firebase'
 
 export default function Home({ desloga }) {
   const cartLength = useSelector(state => state.cart.length)
@@ -24,7 +25,30 @@ export default function Home({ desloga }) {
     firebase.auth().onAuthStateChanged(user => {
       setUserAuth(user)
     })
+
+    if (userAuth) {
+      let userData = {
+        id: userAuth.uid,
+        nome: userAuth.displayName,
+        email: userAuth.email,
+        telefone: userAuth.phoneNumber,
+        endereco: null
+      }
+
+      const clientesRef = db.collection('clientes')
+      const snapshot = clientesRef.where('id', '==', userData.id).get()
+
+      snapshot.then(val => {
+        if (val.empty) {
+          console.log('Cadastra')
+          db.collection('clientes').add(userData)
+        } else {
+          console.log('Não faz nada')
+        }
+      })
+    }
   })
+
   return (
     <>
       <Header User={userAuth} />
