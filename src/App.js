@@ -1,11 +1,15 @@
-import './App.css'
-import Cart from './Components/Cart'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
-import Home from './Components/Home'
+
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import firebase from 'firebase'
 import StyleFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
+
+import './App.css'
 import styled from 'styled-components'
+
+import Home from './Components/Home'
+import Cart from './Components/Cart'
+import StatusPedido from './Components/StatusPedido'
 
 let uiConfig = {
   signInFlow: 'redirect',
@@ -63,6 +67,7 @@ function App() {
       <div className="App">
         <Switch>
           <Route path="/Cart" exact component={Cart} />
+          <Route path="/status-pedido" exact component={StatusPedido} />
           {userAuth === null ? (
             <Login>
               <ImgLogo

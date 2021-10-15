@@ -18,6 +18,7 @@ export default function Cart() {
   const item = useSelector(state => state.cart)
   const dispatch = useDispatch()
   const [userAuth, setUserAuth] = useState(null)
+  const [statusPedido, setStatusPedido] = useState(false)
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
@@ -40,7 +41,13 @@ export default function Cart() {
     }
     return (
       <>
-        <p>Total:{total}</p>
+        <p>
+          Total:
+          {total.toLocaleString('pt-br', {
+            style: 'currency',
+            currency: 'BRL'
+          })}
+        </p>
         <p>Faça uma observação:</p>
         <textarea></textarea>
 
@@ -48,6 +55,7 @@ export default function Cart() {
       </>
     )
   }
+
   function fazPedido(prod, total) {
     prod.map(val => {
       let pedido = {
@@ -55,16 +63,32 @@ export default function Cart() {
         pedidoNome: val.data().name,
         valor: total
       }
+
       console.log(pedido)
-      // db.collection('pedido').add()
+
+      db.collection('pedido')
+        .add(pedido)
+        .then(() => {
+          setStatusPedido(true)
+          console.log('> Pedido enviado!')
+        })
+        .catch(err => {
+          console.log(err)
+        })
     })
   }
+
   return (
     <>
       <Header User={userAuth} />
       <CartSection>
         {item.length > 0 ? (
           item.map((item, id) => {
+            let valor = item.data().preco.toLocaleString('pt-br', {
+              style: 'currency',
+              currency: 'BRL'
+            })
+
             return (
               <div className="content-prod" key={id}>
                 <div className="content-img">
@@ -73,7 +97,7 @@ export default function Cart() {
                 <div className="info-Content">
                   <h4 key={item.id}>{item.data().name}</h4>
                   <p>{item.data().ingredientes}</p>
-                  <b>R${item.data().preco}</b>
+                  <b>{valor}</b>
                   <button onClick={() => remover(item.id)}>Remover</button>
                 </div>
               </div>
@@ -82,9 +106,11 @@ export default function Cart() {
         ) : (
           <h3>Sem produtos no carrinho</h3>
         )}
+
         <Link to="/">
           <h1>Voltar</h1>
         </Link>
+
         {item.length > 0 ? obs(item) : null}
       </CartSection>
     </>

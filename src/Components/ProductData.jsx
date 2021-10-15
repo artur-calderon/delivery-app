@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import './ProductData.css'
-import { db } from '../firebase'
 import { addItem } from '../store/Reducers/Cart'
+import './ProductData.css'
+
+import { db } from '../firebase'
 import { FaCartPlus } from 'react-icons/fa'
 
 export default function ProductData() {
@@ -29,9 +30,9 @@ export default function ProductData() {
     })
   }, [])
 
-  function getData(car, e) {
+  function getData(item, e) {
     e.preventDefault()
-    dispatch(addItem(car))
+    dispatch(addItem(item))
   }
 
   return (
@@ -53,6 +54,13 @@ export default function ProductData() {
                       </h1>
                       <div id={val.cat} className="accordion__content">
                         {product.map(item => {
+                          let valor = item
+                            .data()
+                            .preco.toLocaleString('pt-br', {
+                              style: 'currency',
+                              currency: 'BRL'
+                            })
+
                           if (val.cat === item.data().categoria) {
                             return (
                               <div className="content-prod" key={item.id}>
@@ -65,7 +73,7 @@ export default function ProductData() {
                                 <div className="info-Content">
                                   <h4 key={item.id}>{item.data().name}</h4>
                                   <p>{item.data().ingredientes}</p>
-                                  <b>R${item.data().preco}</b>
+                                  <b>{valor}</b>
                                   <FaCartPlus
                                     onClick={e => getData(item, e)}
                                     fontSize="2rem"

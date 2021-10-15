@@ -1,7 +1,6 @@
 import React from 'react'
 import { ContainerLogin, LogoLogin } from '../styles/styles'
 import '../Components/Login.css'
-import { GoogleLogin } from 'react-google-login'
 
 export default function Login({ logaGoogle }) {
   return (

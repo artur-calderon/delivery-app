@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import Header from './Header'
-import PromotionCard from './PromotionCard'
-import ProductData from './ProductData'
 import { FaShoppingCart } from 'react-icons/fa'
 import { useSelector } from 'react-redux'
+
 import firebase from 'firebase'
 import { db } from '../firebase'
+
+import ProductData from './ProductData'
+import PromotionCard from './PromotionCard'
+import Header from './Header'
 
 export default function Home({ desloga }) {
   const cartLength = useSelector(state => state.cart.length)

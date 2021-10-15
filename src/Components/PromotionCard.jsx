@@ -1,7 +1,9 @@
 import React from 'react'
 import { db } from '../firebase'
+
 import { useEffect, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
+
 import './PromotionCard.css'
 import 'swiper/swiper.scss'
 import 'swiper/components/navigation/navigation.scss'
