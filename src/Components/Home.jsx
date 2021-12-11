@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom'
 import { FaShoppingCart } from 'react-icons/fa'
 import { useSelector } from 'react-redux'
 
-import firebase from 'firebase'
-import { db } from '../firebase'
+// import * as firebase from 'firebase'
+import { db, onAuthStateChanged, auth, query, where, addDoc } from '../firebase'
 
 import ProductData from './ProductData'
 import PromotionCard from './PromotionCard'
 import Header from './Header'
+import { collection, onSnapshot } from 'firebase/firestore'
 
 export default function Home({ desloga }) {
   const cartLength = useSelector(state => state.cart.length)
@@ -24,7 +25,7 @@ export default function Home({ desloga }) {
   }, [cartLength])
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged(user => {
+    onAuthStateChanged(auth, user => {
       setUserAuth(user)
     })
 
@@ -37,13 +38,19 @@ export default function Home({ desloga }) {
         endereco: null
       }
 
-      const clientesRef = db.collection('clientes')
-      const snapshot = clientesRef.where('id', '==', userData.id).get()
-
-      snapshot.then(val => {
-        if (val.empty) {
-          console.log('Cadastra')
-          db.collection('clientes').add(userData)
+      const q = query(
+        collection(db, 'clientes'),
+        where('id', '==', userData.id)
+      )
+      onSnapshot(q, res => {
+        if (res.empty) {
+          addDoc(collection(db, 'clientes'), { userData })
+            .then(() => {
+              console.log('Cadastrado!')
+            })
+            .catch(err => {
+              console.log(err)
+            })
         } else {
           console.log('Não faz nada')
         }

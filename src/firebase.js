@@ -1,18 +1,54 @@
-import firebase from 'firebase'
+// Import the functions you need from the SDKs you need
+import { initializeApp } from 'firebase/app'
+import {
+  getAuth,
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut
+} from 'firebase/auth'
+import {
+  getFirestore,
+  collection,
+  onSnapshot,
+  doc,
+  deleteDoc,
+  addDoc,
+  query,
+  where
+} from 'firebase/firestore'
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
-const firebaseConfig = firebase.initializeApp({
+// Your web app's Firebase configuration
+const firebaseConfig = {
   apiKey: 'AIzaSyDiMCxMvyLOFyy0fy0wrgNVyLmE1ZNI-YA',
   authDomain: 'deliveryapp-amostra.firebaseapp.com',
   projectId: 'deliveryapp-amostra',
   storageBucket: 'deliveryapp-amostra.appspot.com',
   messagingSenderId: '147922257926',
   appId: '1:147922257926:web:2cb55726652e7ac8139b87'
-})
+}
 
-const db = firebase.firestore()
-const auth = firebase.auth()
-const storage = firebase.storage()
-const functions = firebase.functions()
-const provider = new firebase.auth.GoogleAuthProvider()
+// Initialize Firebase
+const app = initializeApp(firebaseConfig)
+const db = getFirestore(app)
+const auth = getAuth(app)
+const provider = new GoogleAuthProvider()
 
-export { db, auth, storage, functions, firebaseConfig, provider }
+export {
+  app,
+  db,
+  auth,
+  provider,
+  onAuthStateChanged,
+  signInWithPopup,
+  signOut,
+  collection,
+  addDoc,
+  onSnapshot,
+  doc,
+  deleteDoc,
+  query,
+  where
+}

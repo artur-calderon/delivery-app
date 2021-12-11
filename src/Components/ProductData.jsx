@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { addItem } from '../store/Reducers/Cart'
 import './ProductData.css'
 
-import { db } from '../firebase'
+import { db, onSnapshot, collection } from '../firebase'
 import { FaCartPlus } from 'react-icons/fa'
 
 export default function ProductData() {
@@ -21,7 +21,7 @@ export default function ProductData() {
     }
   }
   useEffect(() => {
-    db.collection('categoria').onSnapshot(cat => {
+    onSnapshot(collection(db, 'categoria'), cat => {
       setCategory(
         cat.docs.map(function (val) {
           return { id: val.id, cat: val.data().categoryName }

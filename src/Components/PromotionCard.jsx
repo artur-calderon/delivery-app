@@ -1,5 +1,5 @@
 import React from 'react'
-import { db } from '../firebase'
+import { db, onSnapshot, collection } from '../firebase'
 
 import { useEffect, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -14,7 +14,7 @@ export default function PromotionCard() {
   const [show, setShow] = useState([])
 
   useEffect(() => {
-    db.collection('produtos').onSnapshot(data => {
+    onSnapshot(collection(db, 'produtos'), data => {
       setShow(
         data.docs.map(item => {
           return { id: item.id, info: item.data() }

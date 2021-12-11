@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+
 import { useSelector, useDispatch } from 'react-redux'
-import styled from 'styled-components'
 import { removeItem } from '../store/Reducers/Cart'
+
+import styled from 'styled-components'
 import Header from './Header'
-import firebase from 'firebase'
-import { db } from '../firebase'
+
+import { db, onAuthStateChanged, auth, addDoc, collection } from '../firebase'
 
 const CartSection = styled.div`
   display: flex;
@@ -21,7 +23,7 @@ export default function Cart() {
   const [statusPedido, setStatusPedido] = useState(false)
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged(user => {
+    onAuthStateChanged(auth, user => {
       setUserAuth(user)
     })
   })
@@ -32,13 +34,13 @@ export default function Cart() {
 
   function obs(item) {
     let total = null
-    {
-      item.map(it => {
-        let preco2 = it.data().preco
 
-        return (total += preco2)
-      })
-    }
+    item.map(it => {
+      let preco2 = it.data().preco
+
+      return (total += preco2)
+    })
+
     return (
       <>
         <p>
@@ -66,8 +68,7 @@ export default function Cart() {
 
       console.log(pedido)
 
-      db.collection('pedido')
-        .add(pedido)
+      addDoc(collection(db, 'pedido'), { pedido })
         .then(() => {
           setStatusPedido(true)
           console.log('> Pedido enviado!')
