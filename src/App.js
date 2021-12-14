@@ -17,20 +17,6 @@ import Home from './Components/Home'
 import Cart from './Components/Cart'
 import StatusPedido from './Components/StatusPedido'
 
-// let ui = new firebaseui.auth.AuthUI(auth)
-// ui.start(Login, {
-//   signInFlow: 'redirect',
-//   signInOptions: [
-//     auth.EmailAuthProvider.PROVIDER_ID,
-//     auth.GoogleAuthProvider.PROVIDER_ID,
-//     auth.FacebookAuthProvider.PROVIDER_ID
-//   ],
-//   callbacks: {
-//     signInSucessWithAuthResult: user => {
-//       console.log(user)
-//     }
-//   }
-// })
 function Logar() {
   signInWithPopup(auth, provider)
     .then(result => {})
