@@ -11,7 +11,7 @@ import PromotionCard from './PromotionCard'
 import Header from './Header'
 import { collection, onSnapshot } from 'firebase/firestore'
 
-export default function Home({ desloga }) {
+export default function Home() {
   const cartLength = useSelector(state => state.cart.length)
 
   const [userAuth, setUserAuth] = useState(null)
@@ -72,8 +72,6 @@ export default function Home({ desloga }) {
       </Link>
       <PromotionCard />
       <ProductData />
-
-      <button onClick={() => desloga()}>Sair</button>
     </>
   )
 }

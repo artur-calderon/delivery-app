@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import StatusPedido from './StatusPedido'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { removeItem } from '../store/Reducers/Cart'
+
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 
@@ -105,12 +107,14 @@ export default function Cart() {
         })
     })
   }
+
+  //renderiza de acordo com o status do pedido
   if (statusPedido) {
     return (
       <>
         <Header User={userAuth} />
         <CartSection>
-          <h1>Aguarde o pedido chegar!! :)</h1>
+          <StatusPedido />
         </CartSection>
       </>
     )

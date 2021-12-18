@@ -1,9 +1,23 @@
 import React from 'react'
 import './Header.css'
 
+import { signOut, auth } from '../firebase'
+
 import { HeaderUserInfo } from '../styles/styles'
 
 export default function Header({ User }) {
+  const logOut = () => {
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        alert('Deslogado')
+        // setUserAuth(null)
+      })
+      .catch(error => {
+        // An error happened.
+      })
+  }
+
   return (
     <div className="component-Header">
       <div className="header">
@@ -30,6 +44,7 @@ export default function Header({ User }) {
               src={User.photoURL}
               alt={User.displayName}
             />
+            <button onClick={() => logOut()}>Sair</button>
           </>
         ) : null}
       </HeaderUserInfo>
