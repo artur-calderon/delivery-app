@@ -26,13 +26,13 @@ export default function Cart() {
   const [userAuth, setUserAuth] = useState(null)
   const [statusPedido, setStatusPedido] = useState(false)
   const [observ, setObserv] = useState('')
+  const modal = withReactContent(Swal)
 
   useEffect(() => {
     onAuthStateChanged(auth, user => {
       setUserAuth(user)
     })
   })
-  const modal = withReactContent(Swal)
 
   function remover(id) {
     dispatch(removeItem(id))
@@ -79,7 +79,7 @@ export default function Cart() {
         observacao: observacao,
         valorUnit: val.data().preco,
         total,
-        statsusPedido: false
+        statusPedido: 'Aguardando aprovação'
       }
 
       console.log(pedido)
@@ -94,6 +94,7 @@ export default function Cart() {
             showConfirmButton: true,
             timer: 3000
           })
+          remover(val.id)
         })
         .catch(err => {
           console.log(err)
@@ -114,7 +115,7 @@ export default function Cart() {
       <>
         <Header User={userAuth} />
         <CartSection>
-          <StatusPedido />
+          <StatusPedido ped={setStatusPedido} />
         </CartSection>
       </>
     )
