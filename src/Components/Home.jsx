@@ -4,12 +4,12 @@ import { FaShoppingCart } from 'react-icons/fa'
 import { useSelector } from 'react-redux'
 
 // import * as firebase from 'firebase'
-import { db, onAuthStateChanged, auth, query, where, addDoc } from '../firebase'
+import { db, onAuthStateChanged, auth, query, where } from '../firebase'
 
 import ProductData from './ProductData'
 import PromotionCard from './PromotionCard'
 import Header from './Header'
-import { collection, onSnapshot } from 'firebase/firestore'
+import { collection, onSnapshot, setDoc, doc } from 'firebase/firestore'
 
 export default function Home() {
   const cartLength = useSelector(state => state.cart.length)
@@ -30,21 +30,21 @@ export default function Home() {
     })
 
     if (userAuth) {
-      let userData = {
-        id: userAuth.uid,
-        nome: userAuth.displayName,
-        email: userAuth.email,
-        telefone: userAuth.phoneNumber,
-        endereco: null
-      }
+      console.log(userAuth)
 
       const q = query(
         collection(db, 'clientes'),
-        where('id', '==', userData.id)
+        where('id', '==', userAuth.uid)
       )
       onSnapshot(q, res => {
         if (res.empty) {
-          addDoc(collection(db, 'clientes'), { userData })
+          setDoc(doc(db, 'clientes', userAuth.displayName.replace(/ /g, '')), {
+            id: userAuth.uid,
+            nome: userAuth.displayName,
+            email: userAuth.email,
+            telefone: userAuth.phoneNumber,
+            endereco: null
+          })
             .then(() => {
               console.log('Cadastrado!')
             })

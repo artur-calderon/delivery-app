@@ -11,7 +11,7 @@ export default function Header({ User }) {
       .then(() => {
         // Sign-out successful.
         alert('Deslogado')
-        // setUserAuth(null)
+        window.location.href = '/';
       })
       .catch(error => {
         // An error happened.

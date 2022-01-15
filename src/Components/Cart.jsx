@@ -10,8 +10,18 @@ import withReactContent from 'sweetalert2-react-content'
 
 import styled from 'styled-components'
 import Header from './Header'
+import './Cart.css'
 
-import { db, onAuthStateChanged, auth, addDoc, collection } from '../firebase'
+import {
+  db,
+  onAuthStateChanged,
+  auth,
+  addDoc,
+  collection,
+  query,
+  onSnapshot
+} from '../firebase'
+import { doc, updateDoc } from 'firebase/firestore'
 
 const CartSection = styled.div`
   display: flex;
@@ -20,19 +30,74 @@ const CartSection = styled.div`
   flex-direction: column;
   margin: 2rem 1rem 0 1rem;
 `
+
 export default function Cart() {
   const item = useSelector(state => state.cart)
   const dispatch = useDispatch()
-  const [userAuth, setUserAuth] = useState(null)
+  const [userAuth, setUserAuth] = useState({ displayName: 'User Name' })
   const [statusPedido, setStatusPedido] = useState(false)
   const [observ, setObserv] = useState('')
   const modal = withReactContent(Swal)
+  const [cantOrder, setCantOrder] = useState(null)
 
   useEffect(() => {
     onAuthStateChanged(auth, user => {
       setUserAuth(user)
     })
+
   })
+  useEffect(()=>{
+    const q = query(doc(db, 'clientes', userAuth.displayName.replace(/ /g, '')))
+    onSnapshot(q, res => {
+      console.log(res.data())
+      if(res.data())
+      if (res.data().endereco == null || res.data().telefone == null) {
+        setCantOrder(false)
+      } else {
+        return setCantOrder(true)
+      }
+    })
+  })
+
+
+  async function Modal() {
+    const { value: formValues } = await modal.fire({
+      title: 'Adicione os dados que faltam',
+      padding: 0,
+      html:
+        '<h3>Endereço:</h3>' +
+        '<input id="swal-input1" class="swal2-input">' +
+        '<h3>Telefone:</h3>' +
+        '<input id="swal-input2" class="swal2-input">',
+      focusConfirm: false,
+      preConfirm: () => {
+        return [
+          document.getElementById('swal-input1').value,
+          document.getElementById('swal-input2').value
+        ]
+      }
+    })
+
+    if (formValues) {
+      // Swal.fire(JSON.stringify(formValues))
+      console.log(formValues[0])
+      const refDoc = doc(db, 'clientes', userAuth.displayName.replace(/ /g, ''))
+      await updateDoc(refDoc, {
+        endereco: formValues[0],
+        telefone: formValues[1]
+      })
+        .then(() => {
+          console.log('Certo')
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+
+  }
+
+  // antes de fazer o pedido verifica se o user tem cadastrados os endereço e o telefone
+
 
   function remover(id) {
     dispatch(removeItem(id))
@@ -72,6 +137,9 @@ export default function Cart() {
 
   function fazPedido(prod, total, observacao, e) {
     e.preventDefault()
+    if (cantOrder !== true) {
+      Modal()
+    } else
     prod.map(val => {
       let pedido = {
         nomeCliente: userAuth.displayName,
@@ -107,6 +175,8 @@ export default function Cart() {
           })
         })
     })
+
+
   }
 
   //renderiza de acordo com o status do pedido
